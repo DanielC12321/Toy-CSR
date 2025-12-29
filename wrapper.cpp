@@ -1,6 +1,7 @@
 #include <pybind11/pybind11.h> 
 #include <pybind11/numpy.h> 
 #include <iostream>
+#include <omp.h>
 namespace py = pybind11;
 
 py::array_t<double> csr_matvec(
@@ -22,7 +23,7 @@ py::array_t<double> csr_matvec(
     std::cout << "DEBUG: n_rows = " << n_rows << std::endl;
     std::cout << "DEBUG: result shape = " << result.shape(0) << std::endl;
     std::cout << "DEBUG: result stride = " << result.strides(0) << std::endl;
-    
+    #pragma omp parallel for schedule(dynamic)
     for (int i = 0; i<n_rows; i++)
     {
         double res = 0;
